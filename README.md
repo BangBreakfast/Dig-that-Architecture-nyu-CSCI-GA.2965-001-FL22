@@ -32,7 +32,7 @@ $ npm run serve
 
 ## Sequenece chart
 
-![Sequenece chart](assets/docs/image.png)
+![Sequenece chart](image.png)
 
 ## Contact
 
