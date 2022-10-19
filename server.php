@@ -15,6 +15,11 @@
 	socket_bind($socket, 'localhost', $argv[1]);
 	socket_listen($socket, 3);
 
+	// initialize game
+	$grid_num = $argv[2];
+	$number_of_phases = $argv[3];
+	$length_of_path = $argv[4];
+
 	$connections;
 	$observed = false;
 	if($argc == 6 && $argv[5] == "-o") {
@@ -26,6 +31,7 @@
 
 		// extra communication to identify client (see comment below for more details on websocket exchange)
 		$identification = socket_read($connections[0], 5000);
+		
 		if(strpos($identification, "Sec-WebSocket-Key:") !== false) {
 			preg_match('#Sec-WebSocket-Key: (.*)\r\n#', $identification, $matches);
 			$key = base64_encode(pack('H*', sha1($matches[1] . '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')));
@@ -37,6 +43,11 @@
 			socket_write($connections[0], $headers, strlen($headers));
 			$observed = true;
 		}
+	}
+
+	// send initial data to observer
+	if($observed) {
+		send_message($connections[0], "info $grid_num $number_of_phases\n", true);
 	}
 
 	// wait for two connections to continue
@@ -108,8 +119,10 @@
 			send_message($connections[2], "-1\n", $is_websocket[2]);
 		}
 		
-		// send update to observer
-		if($observed) {send_message($connections[0], "$num_stones 0\n", true);}
+		if($observed) {
+			send_message($connections[0], "terminated infty", true);
+		}
+			
 
 		socket_close($socket);
 
@@ -124,10 +137,6 @@
 		exit;
 	}
 
-	// initialize game
-	$grid_num = $argv[2];
-	$number_of_phases = $argv[3];
-	$length_of_path = $argv[4];
 
 	// send initial data to both players
 	send_message($connections[1], "T $grid_num $number_of_phases $length_of_path\n", $is_websocket[1]);
@@ -135,8 +144,9 @@
 	$time_start = hrtime(true);
 	send_message($connections[2], "D $grid_num $number_of_phases $length_of_path\n", $is_websocket[2]);
 
-	// send initial data to observer
-	if($observed) {send_message($connections[0], "$name[1] $name[2] $num_stones\n", true);}
+	if($observed) {
+		send_message($connections[0], "name $name[1] $name[2] \n", true);
+	}
 
 	// both players now have 2 minutes each remaining (120 seconds)
 	$time_remaining[1] = 120 * 1000000000;
@@ -189,7 +199,10 @@
 			$axis = explode(",", $command_parts[$it]);
 			$axis_x = (int) $axis[0];
 			$axis_y = (int) $axis[1];
-			
+			if($it > $length_of_path+1) {
+				echo("[ERROR] The tunnel vertex number is out of range\n");
+				illegal_end(1,$connections,$observed,$socket);
+			}
 			if($axis_x < 1 || $axis_x > $grid_num) {
 				echo("[ERROR] The tunnel vertex $it'x is out of range\n");
 				illegal_end(1,$connections,$observed,$socket);
@@ -223,16 +236,14 @@
 		} 
 		// log results
 		// send update to observer
-		if($observed) {send_message($connections[0], "$num_stones 0\n", true);}
+		if($observed) {
+			send_message($connections[0], $command, true);
+			socket_read($connections[0],5000);
+		}
 
 		echo("[INFO] Move time remaining: $time_remaining[1] microseconds\n\n");
 	} else {
 		illegal_end(1,$connections,$observed,$socket);
-	}
-
-	if($observed) {
-		// wait for next step 
-		$line = fgets(STDIN);
 	}
 
 	$score = 0;
@@ -328,6 +339,11 @@
 			echo("[INFO] Move time remaining: $time_remaining[2] microseconds\n\n");
 			$score +=  count($command_parts) - 1;
 		}
+		//update observer
+		if($observed) {
+			send_message($connections[0], $command, true);
+			socket_read($connections[0],5000);
+		}
 		//Disrupt the order
 		shuffle($ret_path);
 		//Send back the path
@@ -381,6 +397,10 @@
 			$axis_x = (int) $axis[0];
 			$axis_y = (int) $axis[1];
 			
+			if($it > $length_of_path+1) {
+				echo("[ERROR] The detector vertex number is out of range\n");
+				illegal_end(1,$connections,$observed,$socket);
+			}
 			if($axis_x < 1 || $axis_x > $grid_num) {
 				echo("[ERROR] The detector vertex $it'x is out of range\n");
 				illegal_end(2,$connections,$observed,$socket);
@@ -422,7 +442,11 @@
 		illegal_end(2,$connections,$observed,$socket);
 	}
 
-
+	//update observer
+	if($observed) {
+		send_message($connections[0], $command, true);
+		socket_read($connections[0],5000);
+	}
 
 	$detector_name = $name[2];
 	// print result
@@ -430,12 +454,22 @@
 		send_message($connections[1], "$score\n", $is_websocket[1]);
 		send_message($connections[2], "$score\n", $is_websocket[2]);
 		echo("[INFO] The detector $detector_name got a score of $score\n\n");
+		//update observer
+		if($observed) {
+			send_message($connections[0], "terminated $score\n", true);
+		}
 	} else {
 		send_message($connections[1], "-3\n", $is_websocket[1]);
 		send_message($connections[2], "-3\n", $is_websocket[2]);
 		echo("[INFO] the detector $detector_name fail to get the path.\n\n");
 		echo("[INFO] the detector $detector_name Got a score of infty.\n\n");
+		//update observer
+		if($observed) {
+			send_message($connections[0], "terminated infty\n", true);
+			socket_read($connections[0],5000);
+		}
 	}
+
 
 	// close socket
 	socket_close($socket);

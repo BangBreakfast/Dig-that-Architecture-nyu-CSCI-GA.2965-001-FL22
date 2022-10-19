@@ -34,7 +34,6 @@ struct Bot {
 		for(int i=1;i<=grid_num;++i) {
 			res.push_back(std::make_pair(1,i));
 		}
-
 		return res;
 	}
 

@@ -132,6 +132,8 @@ class Client():
         res = []
         for i in range(1,self.grid_num+1) :
             res.append([1,i])
+        res.append([2,self.grid_num])
+        res.append([3,self.grid_num])
         return res
     
     def end_detect(self) :
@@ -140,7 +142,7 @@ class Client():
 		//Return a non-zero number if the detector believes that the information is enough
 		//The server will jump into the guess mode
         '''
-        return 1
+        return 0
     
     def select_detector(self) :
         '''
@@ -175,6 +177,8 @@ class Client():
         res = []
         for i in range(1,self.grid_num+1) :
             res.append([1,i])
+        res.append([2,self.grid_num])
+        res.append([3,self.grid_num])
         return res
     
 
