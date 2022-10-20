@@ -181,8 +181,6 @@ void play_game() {
 	// create bot
 	Bot b(grid_num, number_of_phases, number_of_phases);
 
-	// the first player can make a move without getting state first
-	// the second needs to make an initial request
 	if(player_id == 'T') {
 		std::vector<std::pair<int,int> > tunnel =  b.dig_tunnel();
 		res = send_tunnel(tunnel);

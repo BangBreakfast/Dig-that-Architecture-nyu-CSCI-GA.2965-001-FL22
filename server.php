@@ -324,7 +324,6 @@
 							$tmp_edge = array($path[$j],$path[$j+1]);
 							$tmp_edge_reverse = array($path[$j+1],$path[$j]);
 							if(!in_array($tmp_edge,$ret_path) && !in_array($tmp_edge_reverse,$ret_path)) {
-								echo("[INFO] rand num is $rand_num\n");
 								$rand_num = mt_rand()%2;
 								if($rand_num==1) {
 									array_push($ret_path,$tmp_edge);
