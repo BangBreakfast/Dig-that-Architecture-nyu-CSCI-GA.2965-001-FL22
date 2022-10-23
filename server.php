@@ -304,7 +304,7 @@
 					echo("[ERROR] The detect vertex $it'y is out of range\n");
 					illegal_end(2,$connections,$observed,$socket);
 				} 
-				for($j = 1; $j < count($path); $j++) {
+				for($j = 1; $j <= count($path); $j++) {
 					if($path[$j][0] ==  $axis_x && $path[$j][1] ==  $axis_y) {
 						if($j!=1) {
 							$tmp_edge = array($path[$j-1],$path[$j]);
@@ -320,7 +320,7 @@
 								
 							}
 						}
-						if($j!=count($path)-1) {
+						if($j!=count($path)) {
 							$tmp_edge = array($path[$j],$path[$j+1]);
 							$tmp_edge_reverse = array($path[$j+1],$path[$j]);
 							if(!in_array($tmp_edge,$ret_path) && !in_array($tmp_edge_reverse,$ret_path)) {
@@ -351,6 +351,11 @@
 		for($it = 0;$it<count($ret_path);$it++) {
 			$path_str = $path_str . " " . $ret_path[$it][0][0] . " " . $ret_path[$it][0][1];
 			$path_str = $path_str . " " . $ret_path[$it][1][0] . " " . $ret_path[$it][1][1];
+			$x0 = $ret_path[$it][0][0];
+			$y0 = $ret_path[$it][0][1];
+			$x1 = $ret_path[$it][1][0];
+			$y1 = $ret_path[$it][1][1];
+			echo("[INFO] Checked path is: ($x0,$y0) <-> ($x1,$y1)\n");
 		}
 	
 		//send back the path to observer

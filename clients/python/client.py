@@ -132,8 +132,6 @@ class Client():
         res = []
         for i in range(1,self.grid_num+1) :
             res.append([1,i])
-        res.append([2,self.grid_num])
-        res.append([3,self.grid_num])
         return res
     
     def end_detect(self) :
@@ -177,8 +175,6 @@ class Client():
         res = []
         for i in range(1,self.grid_num+1) :
             res.append([1,i])
-        res.append([2,self.grid_num])
-        res.append([3,self.grid_num])
         return res
     
 
