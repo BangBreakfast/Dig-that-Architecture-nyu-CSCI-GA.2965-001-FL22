@@ -163,7 +163,7 @@
 	socket_set_option($connections[1], SOL_SOCKET, SO_RCVTIMEO,
 											array('sec' => intval($time_remaining[1] / 1000000000),
 														'usec'=> 0));
-	$command = socket_read($connections[1], 1024);
+	$command = socket_read($connections[1], 20480);
 	//check if the command 
 	if(!$command) {
 		illegal_end(1,$connections,$observed,$socket);
@@ -248,14 +248,17 @@
 
 	$score = 0;
 	//detector turn
+	echo("\n\n[LOG] -- Detecting STATE --\n");
+
 	$time_start = hrtime(true);
 	send_message($connections[2], "next_phase\n", $is_websocket[2]);
+
 
 	while($number_of_phases > 0) {
 
 		echo("[INFO] Remain phases number is $number_of_phases\n");
 		$number_of_phases=$number_of_phases-1;
-		$command = socket_read($connections[2], 1024);
+		$command = socket_read($connections[2], 20480);
 
 		//check if the command 
 		if(!$command) {
@@ -311,7 +314,6 @@
 							$tmp_edge_reverse = array($path[$j],$path[$j-1]);
 							if(!in_array($tmp_edge,$ret_path) && !in_array($tmp_edge_reverse,$ret_path)) {
 								$rand_num = mt_rand()%2;
-								echo("[INFO] rand num is $rand_num\n");
 								if($rand_num==1) {
 									array_push($ret_path,$tmp_edge);
 								} else {
@@ -367,10 +369,10 @@
 	}
 
 	sleep(1);
-
+	echo("start guessing");
 	send_message($connections[2],"guess\n", $is_websocket[2]);	
 
-	$command = socket_read($connections[2], 1024);
+	$command = socket_read($connections[2], 20480);
 
 	//check if the command 
 	if(!$command) {
@@ -477,4 +479,5 @@
 
 	// close socket
 	socket_close($socket);
+	echo("socket_close\n\n");
 ?>
