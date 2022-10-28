@@ -30,7 +30,7 @@
 		$connections[0] = socket_accept($socket);
 
 		// extra communication to identify client (see comment below for more details on websocket exchange)
-		$identification = socket_read($connections[0], 5000);
+		$identification = socket_read($connections[0], 4096000);
 		
 		if(strpos($identification, "Sec-WebSocket-Key:") !== false) {
 			preg_match('#Sec-WebSocket-Key: (.*)\r\n#', $identification, $matches);
@@ -64,7 +64,7 @@
 		// if a websocket is being used we need to do a handshake
 		// all other clients can send whatever they want as long as it doesn't contain "Sec-WebSocket-Key:"
 		// identification code based on https://medium.com/@cn007b/super-simple-php-websocket-example-ea2cd5893575
-		$identification = socket_read($connections[$i], 5000);
+		$identification = socket_read($connections[$i], 4096000);
 		if(strpos($identification, "Sec-WebSocket-Key:") !== false) {
 			preg_match('#Sec-WebSocket-Key: (.*)\r\n#', $identification, $matches);
 			$key = base64_encode(pack('H*', sha1($matches[1] . '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')));
@@ -163,7 +163,7 @@
 	socket_set_option($connections[1], SOL_SOCKET, SO_RCVTIMEO,
 											array('sec' => intval($time_remaining[1] / 1000000000),
 														'usec'=> 0));
-	$command = socket_read($connections[1], 20480);
+	$command = socket_read($connections[1],4096000);
 	//check if the command 
 	if(!$command) {
 		illegal_end(1,$connections,$observed,$socket);
@@ -238,7 +238,9 @@
 		// send update to observer
 		if($observed) {
 			send_message($connections[0], $command, true);
-			socket_read($connections[0],5000);
+			echo("wait for read");
+			socket_read($connections[0],4096000);
+			// fgets(STDIN);
 		}
 
 		echo("[INFO] Move time remaining: $time_remaining[1] microseconds\n\n");
@@ -258,7 +260,7 @@
 
 		echo("[INFO] Remain phases number is $number_of_phases\n");
 		$number_of_phases=$number_of_phases-1;
-		$command = socket_read($connections[2], 20480);
+		$command = socket_read($connections[2], 4096000);
 
 		//check if the command 
 		if(!$command) {
@@ -343,7 +345,7 @@
 		//update observer
 		if($observed) {
 			send_message($connections[0], $command, true);
-			socket_read($connections[0],5000);
+			socket_read($connections[0],4096000);
 		}
 		//Disrupt the order
 		shuffle($ret_path);
@@ -372,7 +374,7 @@
 	echo("start guessing");
 	send_message($connections[2],"guess\n", $is_websocket[2]);	
 
-	$command = socket_read($connections[2], 20480);
+	$command = socket_read($connections[2], 40480);
 
 	//check if the command 
 	if(!$command) {
@@ -386,7 +388,9 @@
 
 	// split and interpret command
 	// echo($command);
+	
 	$command = str_replace(array("\r", "\n"), '', $command);
+	echo($command);
 	$command_parts = explode(" ", $command);
 	$flag = true;
 	if($command_parts[0] == "guess") {
@@ -451,7 +455,7 @@
 	//update observer
 	if($observed) {
 		send_message($connections[0], $command, true);
-		socket_read($connections[0],5000);
+		socket_read($connections[0],4096000);
 	}
 
 	$detector_name = $name[2];
@@ -472,7 +476,7 @@
 		//update observer
 		if($observed) {
 			send_message($connections[0], "terminated infty\n", true);
-			socket_read($connections[0],5000);
+			socket_read($connections[0],4096000);
 		}
 	}
 

@@ -17,6 +17,7 @@ struct Bot {
 	int number_of_phases;
 	int length_of_path;
 
+	int flag = 0 ;
 	Bot(int _grid_num, int _number_of_phases,int _length_of_path) {
 		grid_num =  _grid_num;
 		number_of_phases = _number_of_phases;
@@ -34,6 +35,7 @@ struct Bot {
 		for(int i=1;i<=grid_num;++i) {
 			res.push_back(std::make_pair(1,i));
 		}
+		flag ++;
 		return res;
 	}
 
@@ -49,7 +51,8 @@ struct Bot {
 		//TODO: This function will call before select detector.
 		//Return a non-zero number if the detector believes that the information is enough
 		//The server will jump into the guess mode
-
+		if(flag == 2)
+			return 1;
 		return 0;
 	}
 

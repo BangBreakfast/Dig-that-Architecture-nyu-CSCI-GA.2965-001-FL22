@@ -1,5 +1,8 @@
 # Dig That 
 
+## New Anouncement
+- I noticed that the websocket used in the original card-nim php server is not the correct form of websocket. So it can have unpredictable problems when sending long data to browser(GUI). Considering the excessive effort required to refactor the php server. I currently have no plans to fix the GUI. If anyone is particularly interested in seeing the GUI results for particular matches, I will refactor the php server and run the corresponding match results in the future after I have a lot of free time.
+
 > Team brute force
 
 This contains a server using basic sockets and a series of simple clients to play dig that
