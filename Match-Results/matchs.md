@@ -9,7 +9,7 @@
 
 | ↓ tunneler : -> detector | ACE | Adult-Onset Diabetes | Coffee_Monster | Checkmate | Dexter's LabRats | HelloWorld | Infancywolf | Kitkat_Addicts | Mad_tacos | NULL |    Pratham     | PTO | Timeout | Truman | Shuttlers |
 | ------------------------ | --- | -------------------- | -------------- | --------- | ---------------- | ---------- | ----------- | -------------- | --------- | ---- | -------------- | --- | ------- | ------ | --------- |
-| ACE                      | -   | 96                   | 185            | 275       | infty            | infty      | infty       | infty          | infty     | 120  | time_out       | 133 | 183     | 361    | -         |
+| ACE                      | -   | 96                   | 185            | 275       | infty            | infty      | infty       | infty          | infty     | 120  | timeout       | 133 | 183     | 361    | -         |
 | Adult-Onset Diabetes     | 82  | -                    | 193            | infty     | infty            | timeout    | infty       | infty          | 190       | 88   | std::bad_alloc | 133 | 183     | 361    | -         |
 | Coffee_Monster           | 101 | 99                   | -              | 257       | infty            | timeout    | infty       | infty          | infty     | 70   | time_out       | 133 | 183     | 361    | -         |
 | Checkmate                | 100 | 88                   | 185            | -         | infty            | infty      | infty       | infty          | infty     | 19   | 283            | 133 | 183     | 361    | -         |
