@@ -1,10 +1,10 @@
 # Match Result for all
 ## Anouncement
-- I noticed that the websocket used in the original card-nim php server is not the correct form of websocket. So it can have unpredictable problems when sending long data. Considering the excessive effort required to refactor the php server. I currently have no plans to fix the GUI. If anyone is particularly interested in seeing the GUI results for particular matches, I will refactor the php server and run the corresponding match results in the future after I have free time.
+- I noticed that the websocket used in the original card-nim php server is not the correct form of websocket. So it can have unpredictable problems when sending long data. Considering the excessive effort required to refactor the php server, I currently have no plans to fix the GUI. If anyone is particularly interested in seeing the GUI results for particular matches, I will refactor the php server and run the corresponding match results in the future after I have free time.
 
 - Also we did not receive the code froms Shuttlers, so the results of their matches in the table are indicates as "-".
 
-- Because I noticed that many colleagues use random numbers in their codes, the following table is for reference only. So the results may be a little different from the matches in lecture.
+- I noticed that many colleagues use random numbers in their codes, so the results may be a little different from the matches in lecture.
 
 
 | ↓ tunneler : -> detector | ACE | Adult-Onset Diabetes | Coffee_Monster | Checkmate | Dexter's LabRats | HelloWorld | Infancywolf | Kitkat_Addicts | Mad_tacos | NULL |    Pratham     | PTO | Timeout | Truman | Shuttlers |
